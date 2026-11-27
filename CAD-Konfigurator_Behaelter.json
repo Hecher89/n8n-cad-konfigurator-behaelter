@@ -1,0 +1,154 @@
+{
+  "name": "CAD-Konfigurator_Behaelter",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Würfel Konfigurator",
+        "formDescription": "Lege Abmaße und umlaufenden Radius fest. ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Kante",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Radius",
+              "fieldType": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -208,
+        0
+      ],
+      "id": "ff86c569-e04a-4f8f-bb52-c21c2320a34b",
+      "name": "Eingabeformulat_Behälter_Konfiguration",
+      "webhookId": "bd79cf8f-09ee-4777-a094-cd5226f84752"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "7b4d478d-5861-449d-a346-d1eedb708c5d",
+      "name": "Ausgabe_CAD-Daten"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5000",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"kante\": {{ $json.Kante }},\n  \"radius\": {{ $json.Radius }}\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        176,
+        0
+      ],
+      "id": "71320774-acc6-49f7-b690-b8428d3d1b95",
+      "name": "CAD_Hintergrund"
+    },
+    {
+      "parameters": {
+        "resource": "database",
+        "databaseId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 3,
+      "position": [
+        176,
+        -400
+      ],
+      "id": "6390cbb8-dde5-427c-80fa-c4fca68533ef",
+      "name": "Datenbank_Kalkulation_Angebote",
+      "credentials": {
+        "notionApi": {
+          "id": "LlJJRtR5280wwlZu",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "database",
+        "databaseId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 3,
+      "position": [
+        176,
+        -192
+      ],
+      "id": "713b3031-ffce-4d6c-8c9e-15ad928cc943",
+      "name": "Datenbank_Konstruktion",
+      "credentials": {
+        "notionApi": {
+          "id": "LlJJRtR5280wwlZu",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Eingabeformulat_Behälter_Konfiguration": {
+      "main": [
+        [
+          {
+            "node": "CAD_Hintergrund",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CAD_Hintergrund": {
+      "main": [
+        [
+          {
+            "node": "Ausgabe_CAD-Daten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "afa8d1d8-2e8c-4c29-8caa-5caedacbd2aa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2be089560867f46bf65cd3823ca2c0f984e7b3ff20db2c9a67851a26d5939e33"
+  },
+  "nodeGroups": [],
+  "id": "7W1UCewdXmlEAVHH",
+  "tags": []
+}
