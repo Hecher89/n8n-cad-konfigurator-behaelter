@@ -10,8 +10,9 @@ Alle verwendeten Kunden- und Produktdaten sind fiktiv, orientieren sich aber an 
 
 Aus den Wunschmaßen eines Kunden soll automatisch ein fertigungsnahes Paket entstehen:
 ein parametrisches CAD-Modell eines Behälters (Boden, Mantel, Deckel), eine bemaßte
-technische Zeichnung und ein Angebot mit Preis. Der manuelle Aufwand für Konfiguration,
-Konstruktion und Angebotserstellung soll durch einen durchgängigen n8n-Workflow ersetzt werden.
+technische Zeichnung, eine Stückliste und ein Angebot mit Preis. Der manuelle Aufwand
+für Konfiguration, Konstruktion und Angebotserstellung soll durch einen durchgängigen
+n8n-Workflow ersetzt werden.
 Das Projekt zeigt, wie KI sinnvoll in einen bestehenden Prozess integriert wird, ohne die
 technisch kritischen Berechnungen dem Zufall zu überlassen.
 
@@ -22,16 +23,16 @@ technisch kritischen Berechnungen dem Zufall zu überlassen.
 3. **Prüfung:** Regelbasierte Plausibilitätsprüfung der Maße (z. B. Wandstärke, Passung des Deckels).
 4. **Konstruktion:** Ein Python-Skript erzeugt in FreeCAD 1.1 (headless) das Modell mit den neuen Maßen.
 5. **Ausgabe:** STEP, STL und eine PDF-Zeichnung mit Bemaßung und Schnittdarstellung.
-6. **Angebot:** Preisberechnung und KI-gestützter Angebotstext.
-7. **Freigabe:** Der Kunde prüft die Maße anhand der PDF-Zeichnung. Mit seiner Bestätigung gilt der Auftrag als angenommen.
-8. **Ablage:** Alle Ergebnisse und der Auftragsstatus werden in Notion gespeichert.
+6. **Stückliste:** Aus den Konfigurationsdaten wird eine Stückliste mit allen Bauteilen erzeugt.
+7. **Angebot:** Preisberechnung auf Basis der Stückliste und KI-gestützter Angebotstext.
+8. **Freigabe:** Der Kunde prüft die Maße anhand der PDF-Zeichnung. Mit seiner Bestätigung gilt der Auftrag als angenommen.
+9. **Ablage:** Alle Ergebnisse und der Auftragsstatus werden in Notion gespeichert.
 
 ## Verarbeitete Inhalte
 
 - **Eingangsdaten:** Kundenname und Kontakt, Innenmaße, weitere Konfigurationsparameter
 - **Stammdaten:** Standardbehälter, Preise, Konstruktionsregeln (Notion-Datenbank)
 - **Erzeugte Daten:** CAD-Modell (STEP, STL), technische Zeichnung (PDF), Stückliste, Angebot, Auftragsdatensatz
-
 ## Architektur
 
 | Komponente | Aufgabe |
@@ -39,6 +40,7 @@ technisch kritischen Berechnungen dem Zufall zu überlassen.
 | n8n (selbst gehostet, Docker) | Steuerung des gesamten Workflows, Formular, Verzweigungen, Dateiausgabe |
 | FreeCAD 1.1 (FreeCADCmd) | Parametrische Konstruktion und Zeichnungsableitung |
 | Pförtner-Skript | Schnittstelle zwischen n8n und FreeCAD: nimmt Parameter entgegen, startet FreeCAD, liefert Dateien zurück |
+| n8n (Code-Node) | Erzeugt die Stückliste aus den Konfigurationsdaten |
 | Notion-Datenbank | Produktstammdaten, Preise, Auftragsablage |
 | KI-Modell (lokal oder Cloud) | Angebotstext, Hinweise bei auffälligen Maßen |
 | Claude | Entwicklungsunterstützung (Brainstorming, Code-Segmente) |
